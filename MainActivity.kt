@@ -38,6 +38,21 @@ import coil.decode.VideoFrameDecoder
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val crashFile = java.io.File(filesDir, "crash.txt")
+        if (crashFile.exists()) {
+            val txt = crashFile.readText()
+            crashFile.delete()
+            val tv = android.widget.TextView(this).apply {
+                text = txt
+                textSize = 11f
+                setTextIsSelectable(true)
+                setPadding(32, 96, 32, 32)
+            }
+            setContentView(android.widget.ScrollView(this).apply { addView(tv) })
+            return
+        }
+
         enableEdgeToEdge()
         val prefs = Prefs(this)
         val loader = ImageLoader.Builder(this).components { add(VideoFrameDecoder.Factory()) }.build()
